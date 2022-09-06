@@ -1,6 +1,5 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {useAppSelector} from "../../redux";
-import {createLogger} from "vite";
 
 interface props{
     children: React.ReactElement[] | React.ReactElement
@@ -16,7 +15,7 @@ const View = ({children}: props) => {
         setTimeout(() => setPrevPanel(''), 100)
     }, [activePanel])
 
-    const panels = (children as React.ReactElement[])
+    const panels = useMemo(() => (children as React.ReactElement[])
         .map((elem: React.ReactElement) => {
             if(elem.props.id === activePanel) {
                 return <div key={elem.props.id+Math.random()} className={'animate-panelIn'}>
@@ -28,7 +27,7 @@ const View = ({children}: props) => {
                     {elem}
                 </div>
             }
-        })
+        }), [currentPanel, prevPanel])
 
     return (
         <div className={'flex overflow-hidden'}>

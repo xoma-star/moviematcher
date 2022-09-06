@@ -8,7 +8,7 @@ interface props{
 
 const Button = ({size, children, onClick}: props) => {
     const clickHandler = (e: React.MouseEvent) => {
-        navigator.vibrate(100)
+        // navigator.vibrate(10)
         if(onClick) onClick(e)
     }
 

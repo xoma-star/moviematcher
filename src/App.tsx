@@ -5,8 +5,13 @@ import Panel from "./panels/Panel";
 import View from "./components/View/View";
 import {UI_Panels} from "./redux/slices/ui";
 import HomePanel from "./panels/Home/HomePanel";
+import {useEffect} from "react";
+import bridge from "@vkontakte/vk-bridge";
 
 function App() {
+    useEffect(() => {
+        bridge.send('VKWebAppInit')
+    }, [])
     return (
         <div className={'flex'}>
             <Noise/>

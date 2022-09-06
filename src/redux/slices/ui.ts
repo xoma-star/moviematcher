@@ -10,7 +10,7 @@ type uiState = {
 }
 
 const initialState: uiState = {
-    activePanel: UI_Panels.HOME
+    activePanel: UI_Panels.WELCOME
 }
 
 const uiSlice = createSlice({

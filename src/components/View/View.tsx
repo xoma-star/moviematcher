@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useAppSelector} from "../../redux";
+import {createLogger} from "vite";
 
 interface props{
     children: React.ReactElement[] | React.ReactElement
@@ -7,20 +8,23 @@ interface props{
 
 const View = ({children}: props) => {
     const [prevPanel, setPrevPanel] = useState('')
+    const [currentPanel, setCurrentPanel] = useState('')
     const {activePanel} = useAppSelector(s => s.ui)
     useEffect(() => {
-        setTimeout(() => setPrevPanel(activePanel), 100)
+        setPrevPanel(currentPanel)
+        setCurrentPanel(activePanel)
+        setTimeout(() => setPrevPanel(''), 100)
     }, [activePanel])
 
     const panels = (children as React.ReactElement[])
         .map((elem: React.ReactElement) => {
             if(elem.props.id === activePanel) {
-                return <div key={elem.props.id}>
+                return <div key={elem.props.id+Math.random()} className={'animate-panelIn'}>
                     {elem}
                 </div>
             }
             if(elem.props.id === prevPanel){
-                return <div key={elem.props.id} className={'-translate-x-full ease-in duration-100 absolute'}>
+                return <div key={elem.props.id+Math.random()} className={'animate-panelOut'}>
                     {elem}
                 </div>
             }

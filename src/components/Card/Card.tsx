@@ -1,9 +1,20 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import Counter from "./Counter";
+import preload from "../../misc/preload";
 
-const Card = () => {
+interface props{
+    screens: string[],
+    name: string,
+    rating: number,
+    short_description: string
+}
+
+const Card = ({screens, name, rating, short_description}: props) => {
     const [initialPoint, setInitialPoint] = useState({x: 0, y: 0})
     const [currentPoint, setCurrentPoint] = useState({x: 0, y: 0})
     const [dragging, setDragging] = useState(false)
+
+    const [currentStep, setCurrentStep] = useState(0)
 
     const touchStartHandler = (e: React.TouchEvent) => {
         setDragging(true)
@@ -23,12 +34,17 @@ const Card = () => {
         })
     }
     const touchEndHandler = () => {
+        if(currentPoint.x - initialPoint.x === 0) {
+            console.log(currentStep)
+            if(currentPoint.x > window.screen.width / 2) {if(currentStep < screens.length - 1) setCurrentStep(x => x + 1)}
+            else if(currentStep > 0) setCurrentStep(x => x - 1)
+        }
         setDragging(false)
         let willMove = 'no'
-        if(currentPoint.x - initialPoint.x > 200) willMove = 'right'
-        else if(currentPoint.x - initialPoint.x < -200) willMove = 'left'
-        else if(currentPoint.y - initialPoint.y < -200) willMove = 'top'
-        else if(currentPoint.y - initialPoint.y > 200) willMove = 'bottom'
+        if(currentPoint.x - initialPoint.x > 100) willMove = 'right'
+        else if(currentPoint.x - initialPoint.x < -100) willMove = 'left'
+        else if(currentPoint.y - initialPoint.y < -100) willMove = 'top'
+        else if(currentPoint.y - initialPoint.y > 100) willMove = 'bottom'
         setCurrentPoint({x: 0, y: 0})
         switch (willMove){
             case 'right':
@@ -47,15 +63,23 @@ const Card = () => {
         }
     }
 
+    useEffect(() => {
+        preload(screens)
+    }, [screens])
+
     return (
         <div
-            style={{transform: `translate(${currentPoint.x - initialPoint.x}px, ${currentPoint.y - initialPoint.y}px) rotate(${(window.screenX - currentPoint.x + initialPoint.x)/45}deg)`, transition: dragging ? '0s' : '200ms'}}
+            style={{
+                transform: `translate(${currentPoint.x - initialPoint.x}px, ${currentPoint.y - initialPoint.y}px) rotate(${(window.screenX - currentPoint.x + initialPoint.x)/45}deg)`, transition: dragging ? '0s' : '200ms'
+            }}
             onTouchStart={touchStartHandler}
             onTouchMove={touchMoveHandler}
             onTouchEnd={touchEndHandler}
-            className={`w-[100%] h-[100%] bg-pink-100 box-border rounded-2xl items-end absolute`}
+            className={`w-[100%] h-[100%] box-border rounded-2xl absolute`}
         >
-
+            <div style={{backgroundImage: `url('${screens[currentStep]}')`}} className={'w-[100%] h-[100%] box-border rounded-2xl bg-pink-100 bg-cover bg-center'}/>
+            <div className={'bg-contain bg-center bg-no-repeat h-full absolute w-full top-0 backdrop-blur-2xl rounded-2xl'} style={{backgroundImage: `url('${screens[currentStep]}')`}}/>
+            <Counter current={currentStep} total={screens.length}/>
         </div>
     );
 };

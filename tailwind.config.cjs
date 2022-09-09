@@ -18,6 +18,11 @@ module.exports = {
         panelOut: {
           '0%': {transform: 'translateX(0)'},
           '100%': {transform: 'translateX(-100vw)'}
+        },
+        shimmer: {
+          "100%": {
+            "transform": "translateX(100%)",
+          },
         }
       }
     },

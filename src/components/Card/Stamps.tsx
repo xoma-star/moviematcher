@@ -15,7 +15,7 @@ const Stamps = ({currentPoint, initialPoint}: {currentPoint: point, initialPoint
             <div style={Math.abs(currentPoint.x - initialPoint.x) < 50 ? {opacity: (-currentPoint.y + initialPoint.y - 50) / window.screen.height * 6} : {opacity: 0}}
                  className={'font-bold text-blue-400 text-4xl absolute bottom-40 z-30 border-4 border-blue-400 p-4 rounded-2xl -rotate-12 right-16'}>ПОСМОТРЮ</div>
             <div style={Math.abs(currentPoint.x - initialPoint.x) < 50 ? {opacity: (currentPoint.y - initialPoint.y - 50) / window.screen.height * 6} : {opacity : 0}}
-                 className={'font-bold text-gray-400 text-4xl absolute top-28 z-30 border-4 border-gray-400 p-4 rounded-2xl rotate-12 right-8'}>СЛЕДУЮЩИЙ</div>
+                 className={'font-bold text-gray-400 text-4xl absolute top-28 z-30 border-4 border-gray-400 p-4 rounded-2xl rotate-12 right-8'}>ПРОПУСТИТЬ</div>
         </>
     );
 };

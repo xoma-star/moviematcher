@@ -9,10 +9,10 @@ const MessagesPanel = () => {
         'https://sun9-41.userapi.com/s/v1/ig2/ChiTd3V-GRNA5EwQSDr_N1htxZy9thj6RV2xsJ0t-7ZG-T3AQS1RULvvhYhitGlwH3RPef4EAWX1_C0GuAGiqqB0.jpg?size=50x0&quality=96&crop=0,0,992,992&ava=1'
     ]
     return (
-        <div className={'flex flex-col'}>
+        <div className={'flex flex-col relative w-full'}>
             <Block header={'Совпадения по интересам'}>
                 <div className={'flex flex-row gap-4 pt-4 flex-wrap justify-between'}>
-                    {[...a, ...a, ...a, ...a].map(r => <div><img className={'w-12 h-12 rounded-full'} src={r}/></div>)}
+                    {[...a, ...a, ...a, ...a].map(r => <div className={'flex items-center flex-col'}><img className={'w-12 h-12 rounded-full'} src={r}/><span>Александр</span></div>)}
                 </div>
             </Block>
         </div>

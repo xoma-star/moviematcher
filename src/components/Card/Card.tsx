@@ -11,7 +11,7 @@ interface props{
     year: string
 }
 
-const Card = ({screens, name, rating, short_description, year}: props) => {
+const Card = ({screens, name, short_description, year}: props) => {
     const [initialPoint, setInitialPoint] = useState({x: 0, y: 0})
     const [currentPoint, setCurrentPoint] = useState({x: 0, y: 0})
     const [dragging, setDragging] = useState(false)
@@ -76,14 +76,15 @@ const Card = ({screens, name, rating, short_description, year}: props) => {
             onTouchStart={touchStartHandler}
             onTouchMove={touchMoveHandler}
             onTouchEnd={touchEndHandler}
-            className={`w-[100%] h-[100%] box-border rounded-2xl absolute`}
+            className={`w-[100%] h-[100%] box-border rounded-2xl absolute overflow-hidden bg-black`}
         >
-            <div style={{backgroundImage: `url('${screens[currentStep]}')`}} className={'w-[100%] h-[100%] box-border rounded-2xl bg-pink-100 bg-cover bg-center'}/>
+            <div style={{backgroundImage: `url('${screens[currentStep]}')`}} className={'w-[120%] h-[120%] box-border rounded-2xl bg-black bg-cover bg-center blur-lg absolute left-[-10%] top-[-10%] opacity-50'}/>
             <Stamps currentPoint={currentPoint} initialPoint={initialPoint}/>
-            <div className={'bg-contain bg-center bg-no-repeat h-full absolute w-full top-0 backdrop-blur-2xl rounded-2xl'} style={{backgroundImage: `url('${screens[currentStep]}')`}}/>
+            <div className={'bg-contain bg-center bg-no-repeat h-full absolute w-full top-0 rounded-2xl'} style={{backgroundImage: `url('${screens[currentStep]}')`}}/>
             <Counter current={currentStep} total={screens.length}/>
-            <div className={'bg-rose-100 absolute bottom-0 rounded-2xl w-full text-[#374A5A] p-4'}>
-                <div className={'font-bold text-2xl'}>{name} ({year})</div>
+            <div className={'bg-rose-100 absolute bottom-0 rounded-2xl w-full text-black p-4'}>
+                <div className={'font-bold text-3xl'}>{name}</div>
+                <div className={'mt-2'}>{year}, комедия, триллер</div>
                 <div className={'leading-4 mt-2'}>{short_description}</div>
             </div>
         </div>

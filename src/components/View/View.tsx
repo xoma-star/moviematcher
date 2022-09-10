@@ -19,12 +19,12 @@ const View = ({children, activePanel}: props) => {
     const panels = useMemo(() => (children as React.ReactElement[])
         .map((elem: React.ReactElement) => {
             if(elem.props.id === activePanel) {
-                return <div key={elem.props.id} className={'animate-panelIn will-change-transform'}>
+                return <div key={elem.props.id} className={'animate-panelIn will-change-transform z-30'}>
                     {elem}
                 </div>
             }
             if(elem.props.id === prevPanel){
-                return <div key={elem.props.id} className={'animate-panelOut will-change-transform'}>
+                return <div key={elem.props.id} className={'animate-panelOut will-change-transform z-20'}>
                     {elem}
                 </div>
             }

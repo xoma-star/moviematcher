@@ -2,7 +2,8 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 export enum UI_Panels{
     'WELCOME' = 'WELCOME',
-    'HOME' = 'HOME'
+    'HOME' = 'HOME',
+    'MESSAGES' = 'MESSAGES'
 }
 
 type uiState = {

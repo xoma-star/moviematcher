@@ -1,14 +1,15 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import {useAppSelector} from "../../redux";
+import {UI_Panels} from "../../redux/slices/ui";
 
 interface props{
-    children: React.ReactElement[] | React.ReactElement
+    children: React.ReactElement[] | React.ReactElement,
+    activePanel: UI_Panels
 }
 
-const View = ({children}: props) => {
+const View = ({children, activePanel}: props) => {
     const [prevPanel, setPrevPanel] = useState('')
     const [currentPanel, setCurrentPanel] = useState('')
-    const {activePanel} = useAppSelector(s => s.ui)
+
     useEffect(() => {
         setPrevPanel(currentPanel)
         setCurrentPanel(activePanel)
@@ -18,12 +19,12 @@ const View = ({children}: props) => {
     const panels = useMemo(() => (children as React.ReactElement[])
         .map((elem: React.ReactElement) => {
             if(elem.props.id === activePanel) {
-                return <div key={elem.props.id+Math.random()} className={'animate-panelIn will-change-transform'}>
+                return <div key={elem.props.id} className={'animate-panelIn will-change-transform'}>
                     {elem}
                 </div>
             }
             if(elem.props.id === prevPanel){
-                return <div key={elem.props.id+Math.random()} className={'animate-panelOut will-change-transform'}>
+                return <div key={elem.props.id} className={'animate-panelOut will-change-transform'}>
                     {elem}
                 </div>
             }

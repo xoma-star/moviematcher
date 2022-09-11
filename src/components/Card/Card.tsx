@@ -4,14 +4,15 @@ import preload from "../../misc/preload";
 import Stamps from "./Stamps";
 
 interface props{
+    title: string,
+    overview: string,
     screens: string[],
-    name: string,
-    rating: number,
-    short_description: string,
-    year: string
+    release_date: string,
+    id: number,
+    onSwipe?: (s: 'right' | 'left' | 'top' | 'bottom') => void
 }
 
-const Card = ({screens, name, short_description, year}: props) => {
+const Card = ({screens, title, overview, release_date, onSwipe}: props) => {
     const [initialPoint, setInitialPoint] = useState({x: 0, y: 0})
     const [currentPoint, setCurrentPoint] = useState({x: 0, y: 0})
     const [dragging, setDragging] = useState(false)
@@ -50,15 +51,19 @@ const Card = ({screens, name, short_description, year}: props) => {
         switch (willMove){
             case 'right':
                 setInitialPoint({x: -1000, y: 0})
+                if(onSwipe) onSwipe('right')
                 break
             case 'left':
                 setInitialPoint({x: 1000, y: 0})
+                if(onSwipe) onSwipe('left')
                 break
             case 'top':
                 setInitialPoint({x: 0, y: 1000})
+                if(onSwipe) onSwipe('top')
                 break
             case 'bottom':
                 setInitialPoint({x: 0, y: -1000})
+                if(onSwipe) onSwipe('bottom')
                 break
             default: setInitialPoint({x: 0, y: 0})
         }
@@ -82,10 +87,14 @@ const Card = ({screens, name, short_description, year}: props) => {
             <Stamps currentPoint={currentPoint} initialPoint={initialPoint}/>
             <div className={'bg-contain bg-center bg-no-repeat h-full absolute w-full top-0 rounded-2xl'} style={{backgroundImage: `url('${screens[currentStep]}')`}}/>
             <Counter current={currentStep} total={screens.length}/>
-            <div className={'bg-rose-100 absolute bottom-0 rounded-2xl w-full text-black p-4'}>
-                <div className={'font-bold text-3xl'}>{name}</div>
-                <div className={'mt-2'}>{year}, комедия, триллер</div>
-                <div className={'leading-4 mt-2'}>{short_description}</div>
+            <div
+                onTouchStart={e => e.stopPropagation()}
+                onTouchMove={e => e.stopPropagation()}
+                onTouchEnd={e => e.stopPropagation()}
+                className={'bg-rose-100 absolute bottom-0 rounded-2xl w-full text-black p-4'}>
+                <div className={'font-bold text-3xl'}>{title}</div>
+                <div className={'mt-2'}>{release_date.split('-')[0]}, комедия, триллер</div>
+                <div className={'leading-4 mt-2 max-h-20 overflow-auto'}>{overview}</div>
             </div>
         </div>
     );

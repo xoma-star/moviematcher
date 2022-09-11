@@ -1,15 +1,5 @@
 query GetMovies{
-    moviematcher{
-        data{
-            attributes{
-                name, short_description, rating, year, screens{
-                    data{
-                        attributes{
-                            url
-                        }
-                    }
-                }
-            }
-        }
+    popular{
+        id, title, overview, screens, release_date
     }
 }

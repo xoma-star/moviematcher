@@ -1,0 +1,5 @@
+query GetUserByVK ($id: Int!){
+    getUserByVk(id: $id){
+        id, vk_user_id, liked, disliked
+    }
+}

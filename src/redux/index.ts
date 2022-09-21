@@ -1,10 +1,12 @@
 import {configureStore} from "@reduxjs/toolkit";
 import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
 import uiReducer from './slices/ui'
+import vkReducer from './slices/vk'
 
 const store = configureStore({
     reducer: {
-        ui: uiReducer
+        ui: uiReducer,
+        vk: vkReducer
     }
 })
 

@@ -1,5 +1,7 @@
 import React from 'react';
 import Block from "../../components/Block/Block";
+import Avatar from "../../components/Avatar/Avatar";
+import Badge from "../../components/Badge/Badge";
 
 const MessagesPanel = () => {
     const a = [
@@ -12,7 +14,7 @@ const MessagesPanel = () => {
         <div className={'flex flex-col relative w-full'}>
             <Block header={'Совпадения по интересам'}>
                 <div className={'flex flex-row gap-4 pt-4 flex-wrap justify-between'}>
-                    {[...a, ...a, ...a, ...a].map(r => <div className={'flex items-center flex-col'}><img className={'w-12 h-12 rounded-full'} src={r}/><span>Александр</span></div>)}
+                    {[...a, ...a, ...a, ...a].map(r => <div className={'flex items-center flex-col'}><Avatar src={r} badge={<Badge>12%</Badge>}/><span className={'mt-2'}>Александр</span></div>)}
                 </div>
             </Block>
         </div>

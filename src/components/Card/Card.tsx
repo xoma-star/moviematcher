@@ -88,13 +88,17 @@ const Card = ({screens, title, overview, release_date, onSwipe}: props) => {
             <div className={'bg-contain bg-center bg-no-repeat h-full absolute w-full top-0 rounded-2xl'} style={{backgroundImage: `url('${screens[currentStep]}')`}}/>
             <Counter current={currentStep} total={screens.length}/>
             <div
-                onTouchStart={e => e.stopPropagation()}
-                onTouchMove={e => e.stopPropagation()}
-                onTouchEnd={e => e.stopPropagation()}
+                // onTouchStart={e => e.stopPropagation()}
+                // onTouchMove={e => e.stopPropagation()}
+                // onTouchEnd={e => e.stopPropagation()}
                 className={'bg-rose-100 absolute bottom-0 rounded-2xl w-full text-black p-4'}>
                 <div className={'font-bold text-3xl'}>{title}</div>
-                <div className={'mt-2'}>{release_date.split('-')[0]}, комедия, триллер</div>
-                <div className={'leading-4 mt-2 max-h-20 overflow-auto'}>{overview}</div>
+                <div className={'mt-2 font-medium'}>{release_date.split('-')[0]}, комедия, триллер</div>
+                <div className={'leading-4 mt-2 max-h-20 overflow-hidden relative'}>
+                    {overview}
+                    <div className={'bg-gradient-to-b from-transparent to-rose-100 absolute w-full h-full max-h-20 top-0'}/>
+                </div>
+                <div className={'text-lg font-medium underline'}>Полностью на themoviedb.org</div>
             </div>
         </div>
     );

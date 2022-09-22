@@ -16,7 +16,7 @@ const HomePanel = () => {
     const [cards, setCards] = useState<movie[]>([])
     const {data} = useGetMoviesQuery()
     const {id, launchParams} = useAppSelector(s => s.vk)
-    const [swipeSender] = useSwipeHandlerMutation({context: {headers: {vk_params: JSON.stringify(launchParams)}}})
+    const [swipeSender] = useSwipeHandlerMutation({context: {headers: {authorization: JSON.stringify(launchParams)}}})
     useEffect(() => {
         if (!!data) setCards(data.popular)
 

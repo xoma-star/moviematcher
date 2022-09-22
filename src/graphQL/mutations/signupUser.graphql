@@ -1,0 +1,5 @@
+mutation SignupUser($id: Int!){
+    createUser(id: $id){
+        id
+    }
+}

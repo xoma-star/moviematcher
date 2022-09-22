@@ -1,0 +1,12 @@
+enum pushMovieToType {
+    liked
+    disliked
+    saved
+    skipped
+}
+
+mutation SwipeHandler($id: String!, $to: pushMovieToType!, $movieId: Int!){
+    pushMovie(id: $id, to: $to, movieId: $movieId){
+        id
+    }
+}

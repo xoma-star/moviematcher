@@ -34,12 +34,20 @@ export type MoviesEntity = {
 export type Mutation = {
   __typename?: 'Mutation';
   createUser: UserEntity;
+  pushMovie: UserEntity;
   updateUser: UserEntity;
 };
 
 
 export type MutationCreateUserArgs = {
   id: Scalars['Int'];
+};
+
+
+export type MutationPushMovieArgs = {
+  id: Scalars['String'];
+  movieId: Scalars['Int'];
+  to: PushMovieToType;
 };
 
 
@@ -76,13 +84,36 @@ export type UpdateUserInputType = {
 export type UserEntity = {
   __typename?: 'UserEntity';
   disliked: Array<Scalars['Int']>;
+  favourite_genres: Array<Scalars['String']>;
   id?: Maybe<Scalars['String']>;
   liked: Array<Scalars['Int']>;
   saved: Array<Scalars['Int']>;
   skipped: Array<Scalars['Int']>;
   vk_user_id: Scalars['Int'];
-  willBeShown: Array<Scalars['Int']>;
 };
+
+export enum PushMovieToType {
+  Disliked = 'disliked',
+  Liked = 'liked',
+  Saved = 'saved',
+  Skipped = 'skipped'
+}
+
+export type SignupUserMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type SignupUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'UserEntity', id?: string | null } };
+
+export type SwipeHandlerMutationVariables = Exact<{
+  id: Scalars['String'];
+  to: PushMovieToType;
+  movieId: Scalars['Int'];
+}>;
+
+
+export type SwipeHandlerMutation = { __typename?: 'Mutation', pushMovie: { __typename?: 'UserEntity', id?: string | null } };
 
 export type GetMoviesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -97,6 +128,74 @@ export type GetUserByVkQueryVariables = Exact<{
 export type GetUserByVkQuery = { __typename?: 'Query', getUserByVk: { __typename?: 'UserEntity', id?: string | null, vk_user_id: number, liked: Array<number>, disliked: Array<number> } };
 
 
+export const SignupUserDocument = gql`
+    mutation SignupUser($id: Int!) {
+  createUser(id: $id) {
+    id
+  }
+}
+    `;
+export type SignupUserMutationFn = Apollo.MutationFunction<SignupUserMutation, SignupUserMutationVariables>;
+
+/**
+ * __useSignupUserMutation__
+ *
+ * To run a mutation, you first call `useSignupUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSignupUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [signupUserMutation, { data, loading, error }] = useSignupUserMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useSignupUserMutation(baseOptions?: Apollo.MutationHookOptions<SignupUserMutation, SignupUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SignupUserMutation, SignupUserMutationVariables>(SignupUserDocument, options);
+      }
+export type SignupUserMutationHookResult = ReturnType<typeof useSignupUserMutation>;
+export type SignupUserMutationResult = Apollo.MutationResult<SignupUserMutation>;
+export type SignupUserMutationOptions = Apollo.BaseMutationOptions<SignupUserMutation, SignupUserMutationVariables>;
+export const SwipeHandlerDocument = gql`
+    mutation SwipeHandler($id: String!, $to: pushMovieToType!, $movieId: Int!) {
+  pushMovie(id: $id, to: $to, movieId: $movieId) {
+    id
+  }
+}
+    `;
+export type SwipeHandlerMutationFn = Apollo.MutationFunction<SwipeHandlerMutation, SwipeHandlerMutationVariables>;
+
+/**
+ * __useSwipeHandlerMutation__
+ *
+ * To run a mutation, you first call `useSwipeHandlerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSwipeHandlerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [swipeHandlerMutation, { data, loading, error }] = useSwipeHandlerMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      to: // value for 'to'
+ *      movieId: // value for 'movieId'
+ *   },
+ * });
+ */
+export function useSwipeHandlerMutation(baseOptions?: Apollo.MutationHookOptions<SwipeHandlerMutation, SwipeHandlerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SwipeHandlerMutation, SwipeHandlerMutationVariables>(SwipeHandlerDocument, options);
+      }
+export type SwipeHandlerMutationHookResult = ReturnType<typeof useSwipeHandlerMutation>;
+export type SwipeHandlerMutationResult = Apollo.MutationResult<SwipeHandlerMutation>;
+export type SwipeHandlerMutationOptions = Apollo.BaseMutationOptions<SwipeHandlerMutation, SwipeHandlerMutationVariables>;
 export const GetMoviesDocument = gql`
     query GetMovies {
   popular {

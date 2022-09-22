@@ -1,15 +1,19 @@
 import {PayloadAction, createSlice} from "@reduxjs/toolkit";
 
+export type launchParamsType = {[key: string]: string}[]
+
 type vkState = {
     id: string | null,
     ava?: string,
     name?: string,
-    verified: boolean | null
+    verified: boolean | null,
+    launchParams: launchParamsType[]
 }
 
 const initialState: vkState = {
     id: null,
-    verified: null
+    verified: null,
+    launchParams: []
 }
 
 const vkSlice = createSlice({
@@ -21,13 +25,17 @@ const vkSlice = createSlice({
         },
         setVerified: (state, action: PayloadAction<boolean>) => {
             state.verified = action.payload
+        },
+        setLaunchParams: (state, action: PayloadAction<launchParamsType[]>) => {
+            state.launchParams = action.payload
         }
     }
 })
 
 export const {
     setID,
-    setVerified
+    setVerified,
+    setLaunchParams
 } = vkSlice.actions
 
 export default vkSlice.reducer

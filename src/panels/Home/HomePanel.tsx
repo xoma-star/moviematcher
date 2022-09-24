@@ -38,7 +38,7 @@ const HomePanel = () => {
                 break
         }
         if(!id) return
-        await swipeSender({variables: {id: id, to: moviePushTo, movieId: movieId}})
+        swipeSender({variables: {id: id, to: moviePushTo, movieId: movieId}}).catch(r => console.log(r))
         setTimeout(() => setCards(p => p.slice(0, p.length - 1)), 300)
     }
     return (

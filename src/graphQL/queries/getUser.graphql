@@ -1,0 +1,5 @@
+query GetUser($id: String!){
+    getUser(id: $id){
+        liked, disliked, vk_user_id, skipped, saved, favourite_genres, id
+    }
+}

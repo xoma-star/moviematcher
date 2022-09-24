@@ -35,6 +35,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createUser: UserEntity;
   pushMovie: UserEntity;
+  updateGenres: UserEntity;
   updateUser: UserEntity;
 };
 
@@ -51,6 +52,12 @@ export type MutationPushMovieArgs = {
 };
 
 
+export type MutationUpdateGenresArgs = {
+  genres: Array<Scalars['String']>;
+  id: Scalars['String'];
+};
+
+
 export type MutationUpdateUserArgs = {
   data: UpdateUserInputType;
   id: Scalars['String'];
@@ -58,6 +65,7 @@ export type MutationUpdateUserArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  getGenreList: Array<Scalars['String']>;
   getUser: UserEntity;
   getUserByVk: UserEntity;
   popular: Array<MoviesEntity>;
@@ -115,10 +123,30 @@ export type SwipeHandlerMutationVariables = Exact<{
 
 export type SwipeHandlerMutation = { __typename?: 'Mutation', pushMovie: { __typename?: 'UserEntity', id?: string | null } };
 
+export type UpdateGenresMutationVariables = Exact<{
+  id: Scalars['String'];
+  genres: Array<Scalars['String']> | Scalars['String'];
+}>;
+
+
+export type UpdateGenresMutation = { __typename?: 'Mutation', updateGenres: { __typename?: 'UserEntity', favourite_genres: Array<string> } };
+
+export type GetGenreListQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetGenreListQuery = { __typename?: 'Query', getGenreList: Array<string> };
+
 export type GetMoviesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetMoviesQuery = { __typename?: 'Query', popular: Array<{ __typename?: 'MoviesEntity', id: number, title: string, overview: string, screens: Array<string>, release_date: string }> };
+
+export type GetUserQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type GetUserQuery = { __typename?: 'Query', getUser: { __typename?: 'UserEntity', liked: Array<number>, disliked: Array<number>, vk_user_id: number, skipped: Array<number>, saved: Array<number>, favourite_genres: Array<string>, id?: string | null } };
 
 export type GetUserByVkQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -196,6 +224,72 @@ export function useSwipeHandlerMutation(baseOptions?: Apollo.MutationHookOptions
 export type SwipeHandlerMutationHookResult = ReturnType<typeof useSwipeHandlerMutation>;
 export type SwipeHandlerMutationResult = Apollo.MutationResult<SwipeHandlerMutation>;
 export type SwipeHandlerMutationOptions = Apollo.BaseMutationOptions<SwipeHandlerMutation, SwipeHandlerMutationVariables>;
+export const UpdateGenresDocument = gql`
+    mutation UpdateGenres($id: String!, $genres: [String!]!) {
+  updateGenres(id: $id, genres: $genres) {
+    favourite_genres
+  }
+}
+    `;
+export type UpdateGenresMutationFn = Apollo.MutationFunction<UpdateGenresMutation, UpdateGenresMutationVariables>;
+
+/**
+ * __useUpdateGenresMutation__
+ *
+ * To run a mutation, you first call `useUpdateGenresMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateGenresMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateGenresMutation, { data, loading, error }] = useUpdateGenresMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      genres: // value for 'genres'
+ *   },
+ * });
+ */
+export function useUpdateGenresMutation(baseOptions?: Apollo.MutationHookOptions<UpdateGenresMutation, UpdateGenresMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateGenresMutation, UpdateGenresMutationVariables>(UpdateGenresDocument, options);
+      }
+export type UpdateGenresMutationHookResult = ReturnType<typeof useUpdateGenresMutation>;
+export type UpdateGenresMutationResult = Apollo.MutationResult<UpdateGenresMutation>;
+export type UpdateGenresMutationOptions = Apollo.BaseMutationOptions<UpdateGenresMutation, UpdateGenresMutationVariables>;
+export const GetGenreListDocument = gql`
+    query GetGenreList {
+  getGenreList
+}
+    `;
+
+/**
+ * __useGetGenreListQuery__
+ *
+ * To run a query within a React component, call `useGetGenreListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetGenreListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetGenreListQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetGenreListQuery(baseOptions?: Apollo.QueryHookOptions<GetGenreListQuery, GetGenreListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetGenreListQuery, GetGenreListQueryVariables>(GetGenreListDocument, options);
+      }
+export function useGetGenreListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetGenreListQuery, GetGenreListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetGenreListQuery, GetGenreListQueryVariables>(GetGenreListDocument, options);
+        }
+export type GetGenreListQueryHookResult = ReturnType<typeof useGetGenreListQuery>;
+export type GetGenreListLazyQueryHookResult = ReturnType<typeof useGetGenreListLazyQuery>;
+export type GetGenreListQueryResult = Apollo.QueryResult<GetGenreListQuery, GetGenreListQueryVariables>;
 export const GetMoviesDocument = gql`
     query GetMovies {
   popular {
@@ -234,6 +328,47 @@ export function useGetMoviesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type GetMoviesQueryHookResult = ReturnType<typeof useGetMoviesQuery>;
 export type GetMoviesLazyQueryHookResult = ReturnType<typeof useGetMoviesLazyQuery>;
 export type GetMoviesQueryResult = Apollo.QueryResult<GetMoviesQuery, GetMoviesQueryVariables>;
+export const GetUserDocument = gql`
+    query GetUser($id: String!) {
+  getUser(id: $id) {
+    liked
+    disliked
+    vk_user_id
+    skipped
+    saved
+    favourite_genres
+    id
+  }
+}
+    `;
+
+/**
+ * __useGetUserQuery__
+ *
+ * To run a query within a React component, call `useGetUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetUserQuery(baseOptions: Apollo.QueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, options);
+      }
+export function useGetUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, options);
+        }
+export type GetUserQueryHookResult = ReturnType<typeof useGetUserQuery>;
+export type GetUserLazyQueryHookResult = ReturnType<typeof useGetUserLazyQuery>;
+export type GetUserQueryResult = Apollo.QueryResult<GetUserQuery, GetUserQueryVariables>;
 export const GetUserByVkDocument = gql`
     query GetUserByVK($id: Int!) {
   getUserByVk(id: $id) {

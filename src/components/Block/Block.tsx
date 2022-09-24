@@ -2,14 +2,15 @@ import React from 'react';
 
 interface props{
     children?: React.ReactElement | React.ReactElement[],
-    header?: string
+    header?: string,
+    className?: string
 }
 
-const Block = ({children, header}: props) => {
+const Block = ({children, header, className}: props) => {
     return (
         <div className={'p-4'}>
-            {<div className={'text-rose-100 font-bold'}>{header}</div>}
-            <div>{children}</div>
+            {header && <div className={'text-rose-100 font-bold mb-4'}>{header}</div>}
+            <div className={className}>{children}</div>
         </div>
     );
 };

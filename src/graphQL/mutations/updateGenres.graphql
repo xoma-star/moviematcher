@@ -1,0 +1,5 @@
+mutation UpdateGenres($id: String!, $genres: [String!]!){
+    updateGenres(id: $id, genres: $genres){
+        favourite_genres
+    }
+}

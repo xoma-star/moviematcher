@@ -76,21 +76,19 @@ const Card = ({screens, title, overview, release_date, onSwipe}: props) => {
     return (
         <div
             style={{
-                transform: `translate(${currentPoint.x - initialPoint.x}px, ${currentPoint.y - initialPoint.y}px) rotate(${(window.screenX - currentPoint.x + initialPoint.x)/45}deg)`, transition: dragging ? '0s' : '200ms'
+                transform: `translate(${currentPoint.x - initialPoint.x}px, ${currentPoint.y - initialPoint.y}px) rotate(${(window.screenX - currentPoint.x + initialPoint.x)/45}deg)`,
+                transition: dragging ? '0s' : '200ms'
             }}
             onTouchStart={touchStartHandler}
             onTouchMove={touchMoveHandler}
             onTouchEnd={touchEndHandler}
-            className={`w-[100%] h-[100%] box-border rounded-2xl absolute overflow-hidden bg-black`}
+            className={`will-change-transform w-[100%] h-[100%] box-border rounded-2xl absolute overflow-hidden bg-black`}
         >
             <div style={{backgroundImage: `url('${screens[currentStep]}')`}} className={'w-[120%] h-[120%] box-border rounded-2xl bg-black bg-cover bg-center blur-lg absolute left-[-10%] top-[-10%] opacity-50'}/>
             <Stamps currentPoint={currentPoint} initialPoint={initialPoint}/>
             <div className={'bg-contain bg-center bg-no-repeat h-full absolute w-full top-0 rounded-2xl'} style={{backgroundImage: `url('${screens[currentStep]}')`}}/>
             <Counter current={currentStep} total={screens.length}/>
             <div
-                // onTouchStart={e => e.stopPropagation()}
-                // onTouchMove={e => e.stopPropagation()}
-                // onTouchEnd={e => e.stopPropagation()}
                 className={'bg-rose-100 absolute bottom-0 rounded-2xl w-full text-black p-4'}>
                 <div className={'font-bold text-3xl'}>{title}</div>
                 <div className={'mt-2 font-medium'}>{release_date.split('-')[0]}, комедия, триллер</div>
@@ -98,7 +96,7 @@ const Card = ({screens, title, overview, release_date, onSwipe}: props) => {
                     {overview}
                     <div className={'bg-gradient-to-b from-transparent to-rose-100 absolute w-full h-full max-h-20 top-0'}/>
                 </div>
-                <div className={'text-lg font-medium underline'}>Полностью на themoviedb.org</div>
+                <div className={'text-lg font-medium underline'}>Подробнее на imdb.com</div>
             </div>
         </div>
     );

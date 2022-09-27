@@ -8,11 +8,13 @@ interface props{
     overview: string,
     screens: string[],
     release_date: string,
-    id: number,
+    id: string,
+    genres: string[],
+    imdb_id: string,
     onSwipe?: (s: 'right' | 'left' | 'top' | 'bottom') => void
 }
 
-const Card = ({screens, title, overview, release_date, onSwipe}: props) => {
+const Card = ({screens, title, overview, release_date, onSwipe, genres, imdb_id}: props) => {
     const [initialPoint, setInitialPoint] = useState({x: 0, y: 0})
     const [currentPoint, setCurrentPoint] = useState({x: 0, y: 0})
     const [dragging, setDragging] = useState(false)
@@ -91,12 +93,12 @@ const Card = ({screens, title, overview, release_date, onSwipe}: props) => {
             <div
                 className={'bg-rose-100 absolute bottom-0 rounded-2xl w-full text-black p-4'}>
                 <div className={'font-bold text-3xl'}>{title}</div>
-                <div className={'mt-2 font-medium'}>{release_date.split('-')[0]}, комедия, триллер</div>
+                <div className={'mt-2 font-medium'}>{release_date.split('-')[0]}, {genres.join(', ')}</div>
                 <div className={'leading-4 mt-2 max-h-20 overflow-hidden relative'}>
                     {overview}
                     <div className={'bg-gradient-to-b from-transparent to-rose-100 absolute w-full h-full max-h-20 top-0'}/>
                 </div>
-                <div className={'text-lg font-medium underline'}>Подробнее на imdb.com</div>
+                <a href={`https://imdb.com/${imdb_id}`}><div className={'text-lg font-medium underline'}>Подробнее на imdb.com</div></a>
             </div>
         </div>
     );

@@ -17,18 +17,23 @@ export type Scalars = {
 
 export type MoviesEntity = {
   __typename?: 'MoviesEntity';
+  companies: Array<Scalars['String']>;
+  countries: Array<Scalars['String']>;
   /** жанры */
   genres: Array<Scalars['String']>;
-  /** id на tmdb */
-  id: Scalars['Float'];
+  id: Scalars['String'];
+  imdb_id: Scalars['String'];
   /** краткое описание */
   overview: Scalars['String'];
+  rating: Scalars['Float'];
   /** дата выхода */
   release_date: Scalars['String'];
   /** кадры */
   screens: Array<Scalars['String']>;
   /** название фильма */
   title: Scalars['String'];
+  /** id на tmdb */
+  tmdb_id: Scalars['Float'];
 };
 
 export type Mutation = {
@@ -47,7 +52,7 @@ export type MutationCreateUserArgs = {
 
 export type MutationPushMovieArgs = {
   id: Scalars['String'];
-  movieId: Scalars['Int'];
+  movieId: Scalars['String'];
   to: PushMovieToType;
 };
 
@@ -66,9 +71,22 @@ export type MutationUpdateUserArgs = {
 export type Query = {
   __typename?: 'Query';
   getGenreList: Array<Scalars['String']>;
+  getMovies: Array<MoviesEntity>;
+  getRecommended: Array<MoviesEntity>;
   getUser: UserEntity;
   getUserByVk: UserEntity;
-  popular: Array<MoviesEntity>;
+};
+
+
+export type QueryGetMoviesArgs = {
+  count: Scalars['Int'];
+  filter?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryGetRecommendedArgs = {
+  count?: InputMaybe<Scalars['Int']>;
+  id: Scalars['String'];
 };
 
 
@@ -82,21 +100,21 @@ export type QueryGetUserByVkArgs = {
 };
 
 export type UpdateUserInputType = {
-  disliked?: InputMaybe<Array<Scalars['Int']>>;
-  liked?: InputMaybe<Array<Scalars['Int']>>;
-  saved?: InputMaybe<Array<Scalars['Int']>>;
-  skipped?: InputMaybe<Array<Scalars['Int']>>;
+  disliked?: InputMaybe<Array<Scalars['String']>>;
+  liked?: InputMaybe<Array<Scalars['String']>>;
+  saved?: InputMaybe<Array<Scalars['String']>>;
+  skipped?: InputMaybe<Array<Scalars['String']>>;
   willBeShown?: InputMaybe<Array<Scalars['Int']>>;
 };
 
 export type UserEntity = {
   __typename?: 'UserEntity';
-  disliked: Array<Scalars['Int']>;
+  disliked: Array<Scalars['String']>;
   favourite_genres: Array<Scalars['String']>;
   id?: Maybe<Scalars['String']>;
-  liked: Array<Scalars['Int']>;
-  saved: Array<Scalars['Int']>;
-  skipped: Array<Scalars['Int']>;
+  liked: Array<Scalars['String']>;
+  saved: Array<Scalars['String']>;
+  skipped: Array<Scalars['String']>;
   vk_user_id: Scalars['Int'];
 };
 
@@ -117,7 +135,7 @@ export type SignupUserMutation = { __typename?: 'Mutation', createUser: { __type
 export type SwipeHandlerMutationVariables = Exact<{
   id: Scalars['String'];
   to: PushMovieToType;
-  movieId: Scalars['Int'];
+  movieId: Scalars['String'];
 }>;
 
 
@@ -136,24 +154,27 @@ export type GetGenreListQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetGenreListQuery = { __typename?: 'Query', getGenreList: Array<string> };
 
-export type GetMoviesQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetMoviesQueryVariables = Exact<{
+  id: Scalars['String'];
+  count?: InputMaybe<Scalars['Int']>;
+}>;
 
 
-export type GetMoviesQuery = { __typename?: 'Query', popular: Array<{ __typename?: 'MoviesEntity', id: number, title: string, overview: string, screens: Array<string>, release_date: string }> };
+export type GetMoviesQuery = { __typename?: 'Query', getRecommended: Array<{ __typename?: 'MoviesEntity', id: string, title: string, overview: string, screens: Array<string>, release_date: string, imdb_id: string, genres: Array<string> }> };
 
 export type GetUserQueryVariables = Exact<{
   id: Scalars['String'];
 }>;
 
 
-export type GetUserQuery = { __typename?: 'Query', getUser: { __typename?: 'UserEntity', liked: Array<number>, disliked: Array<number>, vk_user_id: number, skipped: Array<number>, saved: Array<number>, favourite_genres: Array<string>, id?: string | null } };
+export type GetUserQuery = { __typename?: 'Query', getUser: { __typename?: 'UserEntity', liked: Array<string>, disliked: Array<string>, vk_user_id: number, skipped: Array<string>, saved: Array<string>, favourite_genres: Array<string>, id?: string | null } };
 
 export type GetUserByVkQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type GetUserByVkQuery = { __typename?: 'Query', getUserByVk: { __typename?: 'UserEntity', id?: string | null, vk_user_id: number, liked: Array<number>, disliked: Array<number> } };
+export type GetUserByVkQuery = { __typename?: 'Query', getUserByVk: { __typename?: 'UserEntity', id?: string | null, vk_user_id: number, liked: Array<string>, disliked: Array<string> } };
 
 
 export const SignupUserDocument = gql`
@@ -190,7 +211,7 @@ export type SignupUserMutationHookResult = ReturnType<typeof useSignupUserMutati
 export type SignupUserMutationResult = Apollo.MutationResult<SignupUserMutation>;
 export type SignupUserMutationOptions = Apollo.BaseMutationOptions<SignupUserMutation, SignupUserMutationVariables>;
 export const SwipeHandlerDocument = gql`
-    mutation SwipeHandler($id: String!, $to: pushMovieToType!, $movieId: Int!) {
+    mutation SwipeHandler($id: String!, $to: pushMovieToType!, $movieId: String!) {
   pushMovie(id: $id, to: $to, movieId: $movieId) {
     id
   }
@@ -291,13 +312,15 @@ export type GetGenreListQueryHookResult = ReturnType<typeof useGetGenreListQuery
 export type GetGenreListLazyQueryHookResult = ReturnType<typeof useGetGenreListLazyQuery>;
 export type GetGenreListQueryResult = Apollo.QueryResult<GetGenreListQuery, GetGenreListQueryVariables>;
 export const GetMoviesDocument = gql`
-    query GetMovies {
-  popular {
+    query GetMovies($id: String!, $count: Int) {
+  getRecommended(id: $id, count: $count) {
     id
     title
     overview
     screens
     release_date
+    imdb_id
+    genres
   }
 }
     `;
@@ -314,10 +337,12 @@ export const GetMoviesDocument = gql`
  * @example
  * const { data, loading, error } = useGetMoviesQuery({
  *   variables: {
+ *      id: // value for 'id'
+ *      count: // value for 'count'
  *   },
  * });
  */
-export function useGetMoviesQuery(baseOptions?: Apollo.QueryHookOptions<GetMoviesQuery, GetMoviesQueryVariables>) {
+export function useGetMoviesQuery(baseOptions: Apollo.QueryHookOptions<GetMoviesQuery, GetMoviesQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetMoviesQuery, GetMoviesQueryVariables>(GetMoviesDocument, options);
       }

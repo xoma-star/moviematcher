@@ -1,27 +1,22 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import Card from "../../components/Card/Card";
-import {PushMovieToType, useGetMoviesQuery, useSwipeHandlerMutation} from "../../generated/graphql";
+import {MoviesEntity, PushMovieToType, useGetMoviesQuery, useSwipeHandlerMutation} from "../../generated/graphql";
 import {Icon24Spinner} from "@vkontakte/icons";
 import {useAppSelector} from "../../redux";
 
-type movie = {
-    title: string,
-    overview: string,
-    screens: string[],
-    release_date: string,
-    id: number
-}
+
 
 const HomePanel = () => {
-    const [cards, setCards] = useState<movie[]>([])
-    const {data} = useGetMoviesQuery()
+    const [cards, setCards] = useState<MoviesEntity[]>([])
     const {id, launchParams} = useAppSelector(s => s.vk)
+    const {refetch} = useGetMoviesQuery({variables: {id: id || '', count: 10}, skip: !id, onCompleted: r => {
+            if (!!r) setCards([...cards, ...(r.getRecommended as MoviesEntity[])])
+        },
+        onError: () => refetch()
+    })
     const [swipeSender] = useSwipeHandlerMutation({context: {headers: {authorization: JSON.stringify(launchParams)}}})
-    useEffect(() => {
-        if (!!data) setCards(data.popular)
 
-    }, [data])
-    const swipeHandler = (movieId: number) => async (e: string) => {
+    const swipeHandler = (movieId: string) => async (e: string) => {
         let moviePushTo: PushMovieToType = PushMovieToType.Liked
         switch (e) {
             case 'right':
@@ -40,11 +35,12 @@ const HomePanel = () => {
         if(!id) return
         swipeSender({variables: {id: id, to: moviePushTo, movieId: movieId}}).catch(r => console.log(r))
         setTimeout(() => setCards(p => p.slice(0, p.length - 1)), 300)
+        if(cards.length === 1) refetch({id: id, count: 10})
     }
     return (
         <div className={'flex relative w-full'}>
             {cards.length === 0 && <Icon24Spinner/>}
-            {cards.slice(cards.length - 2, cards.length).map(r => <Card key={r.title} {...r} screens={r.screens.slice(0, 5)} onSwipe={swipeHandler(r.id)}/>)}
+            {cards.slice(cards.length - 2, cards.length).map(r => <Card key={r.title} {...r} screens={r.screens} onSwipe={swipeHandler(r.id)}/>)}
         </div>
     );
 };

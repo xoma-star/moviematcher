@@ -5,7 +5,7 @@ enum pushMovieToType {
     skipped
 }
 
-mutation SwipeHandler($id: String!, $to: pushMovieToType!, $movieId: Int!){
+mutation SwipeHandler($id: String!, $to: pushMovieToType!, $movieId: String!){
     pushMovie(id: $id, to: $to, movieId: $movieId){
         id
     }

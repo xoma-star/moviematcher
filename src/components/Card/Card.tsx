@@ -54,28 +54,28 @@ const Card = ({screens, title, overview, release_date, onSwipe, genres, imdb_id}
         setDragging(false)
         const speed = calcSpeed(currentPoint, prevThrottled)
         let willMove = 'no'
-        if(speed > 30){
-            if(currentPoint.x - initialPoint.x > 1) willMove = 'right'
-            else if(currentPoint.x - initialPoint.x < -1) willMove = 'left'
-            else if(currentPoint.y - initialPoint.y < -1) willMove = 'top'
-            else if(currentPoint.y - initialPoint.y > 1) willMove = 'bottom'
+        if(speed > 20){
+            if(currentPoint.x - initialPoint.x > 30) willMove = 'right'
+            else if(currentPoint.x - initialPoint.x < -30) willMove = 'left'
+            else if(currentPoint.y - initialPoint.y < -30) willMove = 'top'
+            else if(currentPoint.y - initialPoint.y > 30) willMove = 'bottom'
         }
         setCurrentPoint({x: 0, y: 0})
         switch (willMove){
             case 'right':
-                setInitialPoint({x: -1000, y: 0})
+                setInitialPoint({x: -window.screen.width - 60, y: 0})
                 if(onSwipe) onSwipe('right')
                 break
             case 'left':
-                setInitialPoint({x: 1000, y: 0})
+                setInitialPoint({x: window.screen.width + 60, y: 0})
                 if(onSwipe) onSwipe('left')
                 break
             case 'top':
-                setInitialPoint({x: 0, y: 1000})
+                setInitialPoint({x: 0, y: window.screen.height})
                 if(onSwipe) onSwipe('top')
                 break
             case 'bottom':
-                setInitialPoint({x: 0, y: -1000})
+                setInitialPoint({x: 0, y: -window.screen.height})
                 if(onSwipe) onSwipe('bottom')
                 break
             default: setInitialPoint({x: 0, y: 0})

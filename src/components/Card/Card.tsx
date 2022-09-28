@@ -2,6 +2,11 @@ import React, {useEffect, useState} from 'react';
 import Counter from "./Counter";
 import preload from "../../misc/preload";
 import Stamps from "./Stamps";
+import useThrottle from "../../hooks/useThrottle";
+
+const calcSpeed = (a: any, b: any) => {
+    return Math.sqrt(Math.pow(Math.abs(a.x - b.x), 2) + Math.pow(Math.abs(a.y - b.y), 2))
+}
 
 interface props{
     title: string,
@@ -17,9 +22,10 @@ interface props{
 const Card = ({screens, title, overview, release_date, onSwipe, genres, imdb_id}: props) => {
     const [initialPoint, setInitialPoint] = useState({x: 0, y: 0})
     const [currentPoint, setCurrentPoint] = useState({x: 0, y: 0})
+    const [prevPoint, setPrevPoint] = useState({x: 0, y: 0})
     const [dragging, setDragging] = useState(false)
-
     const [currentStep, setCurrentStep] = useState(0)
+    const prevThrottled = useThrottle(prevPoint, 200)
 
     const touchStartHandler = (e: React.TouchEvent) => {
         setDragging(true)
@@ -33,10 +39,12 @@ const Card = ({screens, title, overview, release_date, onSwipe, genres, imdb_id}
         })
     }
     const touchMoveHandler = (e: React.TouchEvent) => {
-        setCurrentPoint({
+        const a = {
             x: e.touches[0].clientX,
             y: e.touches[0].clientY
-        })
+        }
+        setCurrentPoint(a)
+        setPrevPoint(a)
     }
     const touchEndHandler = () => {
         if(currentPoint.x - initialPoint.x === 0) {
@@ -44,11 +52,14 @@ const Card = ({screens, title, overview, release_date, onSwipe, genres, imdb_id}
             else if(currentStep > 0) setCurrentStep(x => x - 1)
         }
         setDragging(false)
+        const speed = calcSpeed(currentPoint, prevThrottled)
         let willMove = 'no'
-        if(currentPoint.x - initialPoint.x > 100) willMove = 'right'
-        else if(currentPoint.x - initialPoint.x < -100) willMove = 'left'
-        else if(currentPoint.y - initialPoint.y < -100) willMove = 'top'
-        else if(currentPoint.y - initialPoint.y > 100) willMove = 'bottom'
+        if(speed > 100){
+            if(currentPoint.x - initialPoint.x > 50) willMove = 'right'
+            else if(currentPoint.x - initialPoint.x < -50) willMove = 'left'
+            else if(currentPoint.y - initialPoint.y < -50) willMove = 'top'
+            else if(currentPoint.y - initialPoint.y > 50) willMove = 'bottom'
+        }
         setCurrentPoint({x: 0, y: 0})
         switch (willMove){
             case 'right':
@@ -98,7 +109,9 @@ const Card = ({screens, title, overview, release_date, onSwipe, genres, imdb_id}
                     {overview}
                     <div className={'bg-gradient-to-b from-transparent to-rose-100 absolute w-full h-full max-h-20 top-0'}/>
                 </div>
-                <a target={'_blank'} href={`https://imdb.com/title/${imdb_id}`}><div className={'text-lg font-medium underline'}>Подробнее на imdb.com</div></a>
+                <a onClick={(e) => e.stopPropagation()} target={'_blank'} href={`https://imdb.com/title/${imdb_id}`}>
+                    <div className={'text-lg font-medium underline'}>Подробнее на imdb.com</div>
+                </a>
             </div>
         </div>
     );

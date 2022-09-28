@@ -55,10 +55,10 @@ const Card = ({screens, title, overview, release_date, onSwipe, genres, imdb_id}
         const speed = calcSpeed(currentPoint, prevThrottled)
         let willMove = 'no'
         if(speed > 30){
-            if(currentPoint.x - initialPoint.x > 50) willMove = 'right'
-            else if(currentPoint.x - initialPoint.x < -50) willMove = 'left'
-            else if(currentPoint.y - initialPoint.y < -50) willMove = 'top'
-            else if(currentPoint.y - initialPoint.y > 50) willMove = 'bottom'
+            if(currentPoint.x - initialPoint.x > 1) willMove = 'right'
+            else if(currentPoint.x - initialPoint.x < -1) willMove = 'left'
+            else if(currentPoint.y - initialPoint.y < -1) willMove = 'top'
+            else if(currentPoint.y - initialPoint.y > 1) willMove = 'bottom'
         }
         setCurrentPoint({x: 0, y: 0})
         switch (willMove){

@@ -10,7 +10,7 @@ const HomePanel = () => {
     const [cards, setCards] = useState<MoviesEntity[]>([])
     const {id, launchParams} = useAppSelector(s => s.vk)
     const {refetch} = useGetMoviesQuery({variables: {id: id || '', count: 10}, skip: !id, onCompleted: r => {
-            if (!!r) setCards([...cards, ...(r.getRecommended as MoviesEntity[])])
+            if (!!r) setCards([...cards, ...(r.getRecommended as MoviesEntity[]).filter(x => cards.findIndex(v => v.id === x.id) < 0)])
         },
         onError: () => refetch()
     })
@@ -35,7 +35,7 @@ const HomePanel = () => {
         if(!id) return
         swipeSender({variables: {id: id, to: moviePushTo, movieId: movieId}}).catch(r => console.log(r))
         setTimeout(() => setCards(p => p.slice(0, p.length - 1)), 300)
-        if(cards.length === 1) refetch({id: id, count: 10})
+        if(cards.length <= 6) refetch({id: id, count: 10})
     }
     return (
         <div className={'flex relative w-full'}>

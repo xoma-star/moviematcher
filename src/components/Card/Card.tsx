@@ -54,8 +54,7 @@ const Card = ({screens, title, overview, release_date, onSwipe, genres, imdb_id}
         setDragging(false)
         const speed = calcSpeed(currentPoint, prevThrottled)
         let willMove = 'no'
-        console.log(speed)
-        if(speed > 60){
+        if(speed > 30){
             if(currentPoint.x - initialPoint.x > 50) willMove = 'right'
             else if(currentPoint.x - initialPoint.x < -50) willMove = 'left'
             else if(currentPoint.y - initialPoint.y < -50) willMove = 'top'

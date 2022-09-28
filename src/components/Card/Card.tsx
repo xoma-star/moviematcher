@@ -98,7 +98,7 @@ const Card = ({screens, title, overview, release_date, onSwipe, genres, imdb_id}
                     {overview}
                     <div className={'bg-gradient-to-b from-transparent to-rose-100 absolute w-full h-full max-h-20 top-0'}/>
                 </div>
-                <a href={`https://imdb.com/title/${imdb_id}`}><div className={'text-lg font-medium underline'}>Подробнее на imdb.com</div></a>
+                <a target={'_blank'} href={`https://imdb.com/title/${imdb_id}`}><div className={'text-lg font-medium underline'}>Подробнее на imdb.com</div></a>
             </div>
         </div>
     );

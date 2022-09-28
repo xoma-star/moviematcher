@@ -10,7 +10,7 @@ const HomePanel = () => {
     const [cards, setCards] = useState<MoviesEntity[]>([])
     const {id, launchParams} = useAppSelector(s => s.vk)
     const {refetch} = useGetMoviesQuery({variables: {id: id || '', count: 10}, skip: !id, onCompleted: r => {
-            if (!!r) setCards([...cards, ...(r.getRecommended as MoviesEntity[]).filter(x => cards.findIndex(v => v.id === x.id) < 0)])
+            if (!!r) setCards([...(r.getRecommended as MoviesEntity[]).filter(x => cards.findIndex(v => v.id === x.id) < 0), ...cards])
         },
         onError: () => refetch()
     })

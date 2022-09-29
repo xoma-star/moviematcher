@@ -24,6 +24,9 @@ module.exports = {
             "transform": "translateX(100%)",
           },
         }
+      },
+      backgroundImage: {
+        'lines': "url('/img/backdrops/lines.jpg')"
       }
     },
   },

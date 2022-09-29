@@ -17,6 +17,7 @@ function App() {
     return (
         <div className={'flex'}>
             <Noise/>
+            <div className={'w-full h-full fixed bg-[url("img/backdrops/lines-min.jpg")] bg-center bg-cover opacity-60'}/>
             <Navbar/>
             <View activePanel={activePanel}>
                 <Panel id={UI_Panels.WELCOME}><WelcomePanel/></Panel>

@@ -9,6 +9,7 @@ import {useAppSelector} from "./redux";
 import MessagesPanel from "./panels/Messages/MessagesPanel";
 import UserPanel from "./panels/User/UserPanel";
 import useBridge from "./hooks/useBridge";
+import SavedPanel from "./panels/Saved/SavedPanel";
 
 function App() {
     useBridge()
@@ -24,6 +25,7 @@ function App() {
                 <Panel id={UI_Panels.HOME}><HomePanel/></Panel>
                 <Panel id={UI_Panels.MESSAGES}><MessagesPanel/></Panel>
                 <Panel id={UI_Panels.USER}><UserPanel/></Panel>
+                <Panel id={UI_Panels.SAVED}><SavedPanel/></Panel>
             </View>
         </div>
     )

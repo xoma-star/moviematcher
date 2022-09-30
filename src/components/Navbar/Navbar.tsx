@@ -21,7 +21,7 @@ const Navbar = () => {
             <IconButton onClick={clickHandler(UI_Panels.HOME)} isActive={activePanel === UI_Panels.HOME}><Icon24Cards2Outline/></IconButton>
             <IconButton onClick={clickHandler(UI_Panels.MESSAGES)} isActive={activePanel === UI_Panels.MESSAGES}><Icon24MessagesOutline/></IconButton>
             <IconButton onClick={clickHandler(UI_Panels.USER)} isActive={activePanel === UI_Panels.USER}><Icon24UserOutline/></IconButton>
-            <IconButton><Icon24BookmarkOutline/></IconButton>
+            <IconButton onClick={clickHandler(UI_Panels.SAVED)} isActive={activePanel === UI_Panels.SAVED}><Icon24BookmarkOutline/></IconButton>
         </div>
     );
 };

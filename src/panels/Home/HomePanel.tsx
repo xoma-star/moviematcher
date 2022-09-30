@@ -2,15 +2,17 @@ import React, {useState} from 'react';
 import Card from "../../components/Card/Card";
 import {MoviesEntity, PushMovieToType, useGetMoviesQuery, useSwipeHandlerMutation} from "../../generated/graphql";
 import {Icon24Spinner} from "@vkontakte/icons";
-import {useAppSelector} from "../../redux";
+import {useAppDispatch, useAppSelector} from "../../redux";
+import {popFetched, pushFetched} from "../../redux/slices/movies";
 
 
 
 const HomePanel = () => {
-    const [cards, setCards] = useState<MoviesEntity[]>([])
     const {id, launchParams} = useAppSelector(s => s.vk)
-    const {refetch} = useGetMoviesQuery({variables: {id: id || '', count: 10}, skip: !id, onCompleted: r => {
-            if (!!r) setCards([...(r.getRecommended as MoviesEntity[]).filter(x => cards.findIndex(v => v.id === x.id) < 0), ...cards])
+    const {fetched} = useAppSelector(s => s.movie)
+    const dispatch = useAppDispatch()
+    const {refetch} = useGetMoviesQuery({variables: {id: id || '', count: 10}, skip: !id || fetched.length > 0, onCompleted: r => {
+            if(!!r) dispatch(pushFetched(r.getRecommended as MoviesEntity[]))
         },
         onError: () => refetch()
     })
@@ -34,13 +36,13 @@ const HomePanel = () => {
         }
         if(!id) return
         swipeSender({variables: {id: id, to: moviePushTo, movieId: movieId}}).catch(r => console.log(r))
-        setTimeout(() => setCards(p => p.slice(0, p.length - 1)), 300)
-        if(cards.length <= 6) refetch({id: id, count: 10})
+        setTimeout(() => dispatch(popFetched()), 300)
+        if(fetched.length <= 6) refetch({id: id, count: 10})
     }
     return (
         <div className={'flex relative w-full'}>
-            {cards.length === 0 && <Icon24Spinner/>}
-            {cards.slice(cards.length - 2, cards.length).map(r => <Card key={r.title} {...r} screens={r.screens} onSwipe={swipeHandler(r.id)}/>)}
+            {fetched.length === 0 && <Icon24Spinner/>}
+            {fetched.slice(fetched.length - 2, fetched.length).map(r => <Card key={r.title} {...r} screens={r.screens} onSwipe={swipeHandler(r.id)}/>)}
         </div>
     );
 };

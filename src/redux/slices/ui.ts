@@ -4,7 +4,8 @@ export enum UI_Panels{
     'WELCOME' = 'WELCOME',
     'HOME' = 'HOME',
     'MESSAGES' = 'MESSAGES',
-    'USER' = 'USER'
+    'USER' = 'USER',
+    'SAVED' = 'SAVED'
 }
 
 type uiState = {

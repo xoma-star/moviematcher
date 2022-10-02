@@ -17,13 +17,13 @@ const SavedActions = ({movie}: props) => {
         if(selected) return
         setSelected('liked')
         mutate({variables: {id: id, to: PushMovieToType.Liked, movieId: movie, force: true}})
-        window.navigator.vibrate([50, 20, 50])
+        window.navigator.vibrate([100, 50, 100])
     }
     const dislikeHandler = () => {
         if(selected) return
         setSelected('disliked')
         mutate({variables: {id: id, to: PushMovieToType.Disliked, movieId: movie, force: true}})
-        window.navigator.vibrate([100])
+        window.navigator.vibrate([300])
     }
     const removeHandler = () => {
         if(selected) return

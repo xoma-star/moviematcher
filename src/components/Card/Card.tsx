@@ -116,7 +116,6 @@ const Card = ({screens, title, overview, release_date, onSwipe, genres, imdb_id,
             <div className={'bg-contain bg-center bg-no-repeat h-full absolute w-full top-0 rounded-2xl'} style={{backgroundImage: `url('${screens[currentStep]}')`}}/>
             <Counter current={currentStep} total={screens.length}/>
             <div
-                onTouchEnd={(e) => e.stopPropagation()}
                 className={'bg-rose-100 absolute bottom-0 rounded-2xl w-full text-black p-4'}>
                 <div className={'font-bold text-3xl'}>{title}</div>
                 <div className={'mt-2 font-medium'}>{release_date.split('-')[0]}, {genres.join(', ')}</div>
@@ -124,7 +123,7 @@ const Card = ({screens, title, overview, release_date, onSwipe, genres, imdb_id,
                     {overview}
                     <div className={'bg-gradient-to-b from-transparent to-rose-100 absolute w-full h-full max-h-20 top-0'}/>
                 </div>
-                <a target={'_blank'} href={`https://imdb.com/title/${imdb_id}`}>
+                <a target={'_blank'} href={`https://imdb.com/title/${imdb_id}`} onTouchEnd={(e) => e.stopPropagation()}>
                     <div className={'text-lg font-medium underline'}>Подробнее на imdb.com</div>
                 </a>
             </div>

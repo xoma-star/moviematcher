@@ -1,0 +1,5 @@
+query GetSaved($id: String!){
+    getUser(id: $id){
+        saved
+    }
+}

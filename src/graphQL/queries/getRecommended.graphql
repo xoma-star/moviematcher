@@ -1,0 +1,5 @@
+query GetRecommended($id: String!, $count: Int){
+    getRecommended(id: $id, count: $count){
+        id, title, overview, screens, release_date, imdb_id, genres
+    }
+}

@@ -1,5 +1,5 @@
-query GetMovies($id: String!, $count: Int){
-    getRecommended(id: $id, count: $count){
-        id, title, overview, screens, release_date, imdb_id, genres
+query GetMovies($ids: [String!]!){
+    getMovies(ids: $ids){
+        id, title
     }
 }

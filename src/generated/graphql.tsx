@@ -25,9 +25,11 @@ export type MoviesEntity = {
   imdb_id: Scalars['String'];
   /** краткое описание */
   overview: Scalars['String'];
+  popularity: Scalars['Float'];
   rating: Scalars['Float'];
   /** дата выхода */
   release_date: Scalars['String'];
+  runtime: Scalars['Int'];
   /** кадры */
   screens: Array<Scalars['String']>;
   /** название фильма */
@@ -51,6 +53,7 @@ export type MutationCreateUserArgs = {
 
 
 export type MutationPushMovieArgs = {
+  force?: InputMaybe<Scalars['Boolean']>;
   id: Scalars['String'];
   movieId: Scalars['String'];
   to: PushMovieToType;
@@ -70,6 +73,7 @@ export type MutationUpdateUserArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  getAllMovies: Array<MoviesEntity>;
   getGenreList: Array<Scalars['String']>;
   getMovies: Array<MoviesEntity>;
   getRecommended: Array<MoviesEntity>;
@@ -79,8 +83,7 @@ export type Query = {
 
 
 export type QueryGetMoviesArgs = {
-  count: Scalars['Int'];
-  filter?: InputMaybe<Scalars['String']>;
+  ids: Array<Scalars['String']>;
 };
 
 
@@ -136,6 +139,7 @@ export type SwipeHandlerMutationVariables = Exact<{
   id: Scalars['String'];
   to: PushMovieToType;
   movieId: Scalars['String'];
+  force?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 
@@ -155,12 +159,26 @@ export type GetGenreListQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetGenreListQuery = { __typename?: 'Query', getGenreList: Array<string> };
 
 export type GetMoviesQueryVariables = Exact<{
+  ids: Array<Scalars['String']> | Scalars['String'];
+}>;
+
+
+export type GetMoviesQuery = { __typename?: 'Query', getMovies: Array<{ __typename?: 'MoviesEntity', id: string, title: string }> };
+
+export type GetRecommendedQueryVariables = Exact<{
   id: Scalars['String'];
   count?: InputMaybe<Scalars['Int']>;
 }>;
 
 
-export type GetMoviesQuery = { __typename?: 'Query', getRecommended: Array<{ __typename?: 'MoviesEntity', id: string, title: string, overview: string, screens: Array<string>, release_date: string, imdb_id: string, genres: Array<string> }> };
+export type GetRecommendedQuery = { __typename?: 'Query', getRecommended: Array<{ __typename?: 'MoviesEntity', id: string, title: string, overview: string, screens: Array<string>, release_date: string, imdb_id: string, genres: Array<string> }> };
+
+export type GetSavedQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type GetSavedQuery = { __typename?: 'Query', getUser: { __typename?: 'UserEntity', saved: Array<string> } };
 
 export type GetUserQueryVariables = Exact<{
   id: Scalars['String'];
@@ -211,8 +229,8 @@ export type SignupUserMutationHookResult = ReturnType<typeof useSignupUserMutati
 export type SignupUserMutationResult = Apollo.MutationResult<SignupUserMutation>;
 export type SignupUserMutationOptions = Apollo.BaseMutationOptions<SignupUserMutation, SignupUserMutationVariables>;
 export const SwipeHandlerDocument = gql`
-    mutation SwipeHandler($id: String!, $to: pushMovieToType!, $movieId: String!) {
-  pushMovie(id: $id, to: $to, movieId: $movieId) {
+    mutation SwipeHandler($id: String!, $to: pushMovieToType!, $movieId: String!, $force: Boolean) {
+  pushMovie(id: $id, to: $to, movieId: $movieId, force: $force) {
     id
   }
 }
@@ -235,6 +253,7 @@ export type SwipeHandlerMutationFn = Apollo.MutationFunction<SwipeHandlerMutatio
  *      id: // value for 'id'
  *      to: // value for 'to'
  *      movieId: // value for 'movieId'
+ *      force: // value for 'force'
  *   },
  * });
  */
@@ -312,15 +331,10 @@ export type GetGenreListQueryHookResult = ReturnType<typeof useGetGenreListQuery
 export type GetGenreListLazyQueryHookResult = ReturnType<typeof useGetGenreListLazyQuery>;
 export type GetGenreListQueryResult = Apollo.QueryResult<GetGenreListQuery, GetGenreListQueryVariables>;
 export const GetMoviesDocument = gql`
-    query GetMovies($id: String!, $count: Int) {
-  getRecommended(id: $id, count: $count) {
+    query GetMovies($ids: [String!]!) {
+  getMovies(ids: $ids) {
     id
     title
-    overview
-    screens
-    release_date
-    imdb_id
-    genres
   }
 }
     `;
@@ -337,8 +351,7 @@ export const GetMoviesDocument = gql`
  * @example
  * const { data, loading, error } = useGetMoviesQuery({
  *   variables: {
- *      id: // value for 'id'
- *      count: // value for 'count'
+ *      ids: // value for 'ids'
  *   },
  * });
  */
@@ -353,6 +366,83 @@ export function useGetMoviesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type GetMoviesQueryHookResult = ReturnType<typeof useGetMoviesQuery>;
 export type GetMoviesLazyQueryHookResult = ReturnType<typeof useGetMoviesLazyQuery>;
 export type GetMoviesQueryResult = Apollo.QueryResult<GetMoviesQuery, GetMoviesQueryVariables>;
+export const GetRecommendedDocument = gql`
+    query GetRecommended($id: String!, $count: Int) {
+  getRecommended(id: $id, count: $count) {
+    id
+    title
+    overview
+    screens
+    release_date
+    imdb_id
+    genres
+  }
+}
+    `;
+
+/**
+ * __useGetRecommendedQuery__
+ *
+ * To run a query within a React component, call `useGetRecommendedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetRecommendedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetRecommendedQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      count: // value for 'count'
+ *   },
+ * });
+ */
+export function useGetRecommendedQuery(baseOptions: Apollo.QueryHookOptions<GetRecommendedQuery, GetRecommendedQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetRecommendedQuery, GetRecommendedQueryVariables>(GetRecommendedDocument, options);
+      }
+export function useGetRecommendedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetRecommendedQuery, GetRecommendedQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetRecommendedQuery, GetRecommendedQueryVariables>(GetRecommendedDocument, options);
+        }
+export type GetRecommendedQueryHookResult = ReturnType<typeof useGetRecommendedQuery>;
+export type GetRecommendedLazyQueryHookResult = ReturnType<typeof useGetRecommendedLazyQuery>;
+export type GetRecommendedQueryResult = Apollo.QueryResult<GetRecommendedQuery, GetRecommendedQueryVariables>;
+export const GetSavedDocument = gql`
+    query GetSaved($id: String!) {
+  getUser(id: $id) {
+    saved
+  }
+}
+    `;
+
+/**
+ * __useGetSavedQuery__
+ *
+ * To run a query within a React component, call `useGetSavedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSavedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSavedQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetSavedQuery(baseOptions: Apollo.QueryHookOptions<GetSavedQuery, GetSavedQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetSavedQuery, GetSavedQueryVariables>(GetSavedDocument, options);
+      }
+export function useGetSavedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSavedQuery, GetSavedQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetSavedQuery, GetSavedQueryVariables>(GetSavedDocument, options);
+        }
+export type GetSavedQueryHookResult = ReturnType<typeof useGetSavedQuery>;
+export type GetSavedLazyQueryHookResult = ReturnType<typeof useGetSavedLazyQuery>;
+export type GetSavedQueryResult = Apollo.QueryResult<GetSavedQuery, GetSavedQueryVariables>;
 export const GetUserDocument = gql`
     query GetUser($id: String!) {
   getUser(id: $id) {

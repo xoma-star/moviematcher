@@ -1,6 +1,11 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Card from "../../components/Card/Card";
-import {MoviesEntity, PushMovieToType, useGetMoviesQuery, useSwipeHandlerMutation} from "../../generated/graphql";
+import {
+    MoviesEntity,
+    PushMovieToType,
+    useGetRecommendedQuery,
+    useSwipeHandlerMutation
+} from "../../generated/graphql";
 import {Icon24Spinner} from "@vkontakte/icons";
 import {useAppDispatch, useAppSelector} from "../../redux";
 import {popFetched, pushFetched} from "../../redux/slices/movies";
@@ -11,7 +16,7 @@ const HomePanel = () => {
     const {id, launchParams} = useAppSelector(s => s.vk)
     const {fetched} = useAppSelector(s => s.movie)
     const dispatch = useAppDispatch()
-    const {refetch} = useGetMoviesQuery({variables: {id: id || '', count: 10}, skip: !id || fetched.length > 0, onCompleted: r => {
+    const {refetch} = useGetRecommendedQuery({variables: {id: id || '', count: 10}, skip: !id || fetched.length > 0, onCompleted: r => {
             if(!!r) dispatch(pushFetched(r.getRecommended as MoviesEntity[]))
         },
         onError: () => refetch()

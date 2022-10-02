@@ -6,7 +6,7 @@ interface props{
 
 const List = ({children}: props) => {
     return (
-        <div className={'flex flex-col w-full'}>
+        <div className={'flex flex-col w-full gap-4'}>
             {children}
         </div>
     );

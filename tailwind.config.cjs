@@ -7,17 +7,17 @@ module.exports = {
   theme: {
     extend: {
       animation: {
-        panelIn: 'panelIn 100ms linear',
-        panelOut: 'panelOut 100ms linear'
+        panelIn: 'panelIn 200ms ease-in forwards',
+        panelOut: 'panelOut 200ms ease-out forwards'
       },
       keyframes: {
         panelIn: {
-          '0%': { transform: 'translateX(100vw)' },
-          '100%': { transform: 'translateX(0)' },
+          '0%': { transform: 'translateY(100vh)', opacity: 0.2 },
+          '100%': { transform: 'translateY(0)', opacity: 1 },
         },
         panelOut: {
-          '0%': {transform: 'translateX(0)'},
-          '100%': {transform: 'translateX(-100vw)'}
+          '0%': {transform: 'translateY(0)', opacity: 1},
+          '100%': {transform: 'translateY(-100vh)', opacity: 0.2}
         },
         shimmer: {
           "100%": {

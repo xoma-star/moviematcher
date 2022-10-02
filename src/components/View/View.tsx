@@ -14,9 +14,8 @@ const View = ({children, activePanel}: props) => {
         setPrevPanel(currentPanel)
         setCurrentPanel(activePanel)
         setTimeout(() => setPrevPanel(''), 5000)
-        console.log({activePanel}, new Date().getTime())
     }, [activePanel])
-    console.log({activePanel, currentPanel, prevPanel}, new Date().getTime())
+
     const panels = (children as React.ReactElement[])
         .map((elem: React.ReactElement) => {
             if(elem.props.id === currentPanel) {

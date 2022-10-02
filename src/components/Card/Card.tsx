@@ -92,7 +92,7 @@ const Card = ({screens, title, overview, release_date, onSwipe, genres, imdb_id,
         }
         setInitialPoint(willMove === 'no' ? {x: 0, y: 0} : {x: -window.screen.width * dx / diag * 1.2, y: -window.screen.height * dy / diag * 1.1})
     }
-    console.log(title, scaled)
+
     useEffect(() => {
         preload(screens)
     }, [screens])

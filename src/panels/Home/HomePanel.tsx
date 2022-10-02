@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Card from "../../components/Card/Card";
 import {
     MoviesEntity,
@@ -15,6 +15,7 @@ import {popFetched, pushFetched} from "../../redux/slices/movies";
 const HomePanel = () => {
     const {id, launchParams} = useAppSelector(s => s.vk)
     const {fetched} = useAppSelector(s => s.movie)
+    const [backCardScale, setBackCardScale] = useState(0.8)
     const dispatch = useAppDispatch()
     const {refetch} = useGetRecommendedQuery({variables: {id: id || '', count: 10}, skip: !id || fetched.length > 0, onCompleted: r => {
             if(!!r) dispatch(pushFetched(r.getRecommended as MoviesEntity[]))
@@ -44,10 +45,20 @@ const HomePanel = () => {
         setTimeout(() => dispatch(popFetched()), 300)
         if(fetched.length <= 6) refetch({id: id, count: 10})
     }
+
     return (
         <div className={'flex relative w-full'}>
             {fetched.length === 0 && <Icon24Spinner/>}
-            {fetched.slice(fetched.length - 2, fetched.length).map(r => <Card key={r.title} {...r} screens={r.screens} onSwipe={swipeHandler(r.id)}/>)}
+            {fetched
+                .slice(fetched.length - 2, fetched.length)
+                .map((r, i) => <Card
+                    scaled={i === 0 ? backCardScale : undefined}
+                    key={r.id + 'obamka'}
+                    {...r}
+                    screens={r.screens}
+                    onSwipe={swipeHandler(r.id)}
+                    setBackCardScale={(n: number) => setBackCardScale(n)}
+                />)}
         </div>
     );
 };

@@ -7,8 +7,8 @@ module.exports = {
   theme: {
     extend: {
       animation: {
-        panelIn: 'panelIn 200ms ease-in forwards',
-        panelOut: 'panelOut 200ms ease-out forwards'
+        panelIn: 'panelIn 700ms cubic-bezier(0.36,0.66,0.04,1) forwards',
+        panelOut: 'panelOut 700ms cubic-bezier(0.36,0.66,0.04,1) forwards'
       },
       keyframes: {
         panelIn: {
@@ -17,7 +17,8 @@ module.exports = {
         },
         panelOut: {
           '0%': {transform: 'translateY(0)', opacity: 1},
-          '100%': {transform: 'translateY(-100vh)', opacity: 0.2}
+          '20%': {opacity: 0, scale: 0.6},
+          '100%': {transform: 'translateY(-100vh)', opacity: 0}
         },
         shimmer: {
           "100%": {

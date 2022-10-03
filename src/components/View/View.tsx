@@ -13,7 +13,7 @@ const View = ({children, activePanel}: props) => {
     useEffect(() => {
         setPrevPanel(currentPanel)
         setCurrentPanel(activePanel)
-        setTimeout(() => setPrevPanel(''), 5000)
+        setTimeout(() => setPrevPanel(''), 300)
     }, [activePanel])
 
     const panels = (children as React.ReactElement[])

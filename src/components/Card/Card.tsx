@@ -50,7 +50,7 @@ const Card = ({screens, title, overview, release_date, onSwipe, genres, imdb_id,
             x: e.touches[0].clientX,
             y: e.touches[0].clientY
         }
-        const b = Math.abs(diag) / window.screen.height + 0.8
+        const b = Math.abs(diag) * 2 / window.screen.height + 0.9
         setBackCardScale(b < 1 ? b : 1)
         setCurrentPoint(a)
         setPrevPoint(a)
@@ -104,7 +104,8 @@ const Card = ({screens, title, overview, release_date, onSwipe, genres, imdb_id,
                             rotate(${(window.screenX - currentPoint.x + initialPoint.x)/45}deg)
                             scale(${scaled || 1})
                 `,
-                transition: dragging || (scaled && scaled !== 1) ? '0s' : '200ms'
+                transition: dragging || (scaled && scaled !== 1) ? '0s' : '200ms',
+                opacity: scaled || 1
             }}
             onTouchStart={touchStartHandler}
             onTouchMove={touchMoveHandler}

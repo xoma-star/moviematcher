@@ -15,7 +15,7 @@ import {popFetched, pushFetched} from "../../redux/slices/movies";
 const HomePanel = () => {
     const {id, launchParams} = useAppSelector(s => s.vk)
     const {fetched} = useAppSelector(s => s.movie)
-    const [backCardScale, setBackCardScale] = useState(0.8)
+    const [backCardScale, setBackCardScale] = useState(0.9)
     const dispatch = useAppDispatch()
     const {refetch} = useGetRecommendedQuery({variables: {id: id || '', count: 10}, skip: !id || fetched.length > 0, onCompleted: r => {
             if(!!r) dispatch(pushFetched(r.getRecommended as MoviesEntity[]))
@@ -41,7 +41,7 @@ const HomePanel = () => {
                 break
         }
         if(!id) return
-        swipeSender({variables: {id: id, to: moviePushTo, movieId: movieId}}).catch(r => console.log(r))
+        swipeSender({variables: {id: id, to: moviePushTo, movieId: movieId}}).catch(() => {})
         setTimeout(() => dispatch(popFetched()), 300)
         if(fetched.length <= 6) refetch({id: id, count: 10})
     }
@@ -50,9 +50,9 @@ const HomePanel = () => {
         <div className={'flex relative w-full'}>
             {fetched.length === 0 && <Icon24Spinner/>}
             {fetched
-                .slice(fetched.length - 2, fetched.length)
+                .slice(fetched.length - 4, fetched.length)
                 .map((r, i) => <Card
-                    scaled={i === 0 ? backCardScale : undefined}
+                    scaled={i === 2 ? backCardScale : (i < 2 ? (fetched.length <= 2 ? 0.99 : 0.1) : undefined)}
                     key={r.id + 'obamka'}
                     {...r}
                     screens={r.screens}

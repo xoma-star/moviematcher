@@ -5,6 +5,7 @@ import SavedActions from "../../components/SavedActions/SavedActions";
 import {useAppSelector} from "../../redux";
 import {useGetMoviesQuery, useGetSavedQuery} from "../../generated/graphql";
 import {Icon24Spinner} from "@vkontakte/icons";
+import Block from "../../components/Block/Block";
 
 const SavedPanel = () => {
     const {id} = useAppSelector(s => s.vk)
@@ -12,8 +13,7 @@ const SavedPanel = () => {
     const {data, loading} = useGetMoviesQuery({variables: {ids: saved.data?.getUser.saved || []}, skip: (saved.data?.getUser.saved.length || 0) < 1})
 
     return (
-        <div className={'flex flex-col w-full'}>
-            <div className={'text-3xl font-bold mb-8'}>Сохранено</div>
+        <Block header={'Сохранено'}>
             {(saved.loading || loading) && <Icon24Spinner/>}
             <List>
                 {data?.getMovies.map(x => <Cell
@@ -21,7 +21,7 @@ const SavedPanel = () => {
                     actions={<SavedActions movie={x.id}/>}
                 >{x.title}</Cell>)}
             </List>
-        </div>
+        </Block>
     );
 };
 

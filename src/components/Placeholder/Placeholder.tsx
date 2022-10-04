@@ -1,9 +1,17 @@
 import React from 'react';
 
-const Placeholder = () => {
+interface props{
+    header?: string,
+    children?: string,
+    icon?: React.ReactElement
+}
+
+const Placeholder = ({icon, children, header}: props) => {
     return (
-        <div>
-            
+        <div className={'flex flex-col items-center justify-center content-center gap-4 text-center'}>
+            {icon}
+            {header && <div className={'text-xl font-bold'}>{header}</div>}
+            {children && <div>{children}</div>}
         </div>
     );
 };

@@ -13,7 +13,7 @@ type uiState = {
 }
 
 const initialState: uiState = {
-    activePanel: UI_Panels.WELCOME
+    activePanel: localStorage.getItem('pb_id') ? UI_Panels.HOME : UI_Panels.WELCOME
 }
 
 const uiSlice = createSlice({

@@ -11,9 +11,11 @@ const UserPanel = () => {
     const {id ,launchParams} = useAppSelector(s => s.vk)
     useGetUserQuery({variables: {id: id as string}, skip: !id, fetchPolicy: 'network-only', onCompleted: data => setSelected(data.getUser.favourite_genres)})
     const [selected, setSelected] = useState<string[]>([])
-    const handler = (g: string) => () => {
-        mutate({variables: {id: id as string, genres: selected}, context: {headers: {authorization: JSON.stringify(launchParams)}}})
-        setSelected(x => x.indexOf(g) >= 0 ? x.filter(v => v !== g) : [...x, g])
+    const handler = (g: string) => async () => {
+        const x = [...selected]
+        const newSelected = x.indexOf(g) >= 0 ? x.filter(v => v !== g) : [...x, g]
+        setSelected(newSelected)
+        mutate({variables: {id: id as string, genres: newSelected}, context: {headers: {authorization: JSON.stringify(launchParams)}}})
     }
 
     return (

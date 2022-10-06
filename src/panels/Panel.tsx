@@ -7,7 +7,7 @@ interface props{
 
 const Panel = ({children}: props) => {
     return (
-        <div className={'p-4 min-h-[100vh] flex pb-14 min-w-[100vw] relative'}>
+        <div className={'p-4 min-h-[100vh] flex pb-14 min-w-[100vw]'}>
             {children}
         </div>
     );

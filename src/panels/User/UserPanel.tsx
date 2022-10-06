@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import Avatar from "../../components/Avatar/Avatar";
 import Block from "../../components/Block/Block";
 import Button from "../../components/Button/Button";
 import {useGetGenreListQuery, useGetUserQuery, useUpdateGenresMutation} from "../../generated/graphql";
@@ -19,12 +18,12 @@ const UserPanel = () => {
     }
 
     return (
-        <div className={'flex flex-col relative w-full'}>
+        <div className={'flex flex-col w-full'}>
             {/*<div className={'flex items-center'}>*/}
             {/*    <Avatar size={40} src={'https://sun9-23.userapi.com/impg/Q3d0VaD7q2Hj4qQsblaCyyTZxSO-De44nkzQ4Q/RY5AdHjRvu8.jpg?size=604x340&quality=96&sign=0e99edcbd212396b29aaa9af73cf625e&c_uniq_tag=xvxW77bU-zz_p_Hix0rKzT7SwB7f_5SkIRdD0yjGy6U&type=album'}/>*/}
             {/*    <span className={'text-2xl ml-4 font-bold'}>Александр</span>*/}
             {/*</div>*/}
-            <Block header={'Любимые жанры'} className={'flex flex-row gap-2 flex-wrap'}>
+            <Block header={'Любимые жанры'} className={'flex flex-row gap-2 flex-wrap content-center'}>
                 {data && data.getGenreList.map(x => <Button selected={selected.indexOf(x) >= 0} key={`genre${x}`} size={'s'} mode={'secondary'} onClick={handler(x)}>{x}</Button>)}
             </Block>
         </div>
